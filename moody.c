@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <stdint.h> 
 #include <avr/interrupt.h> 
+#include <avr/pgmspace.h>
 
 #define BUTTON1 (1<<PC5) 
 #define BUTTON2 (1<<PC4) 
@@ -16,7 +17,9 @@ volatile uint32_t multi;
 volatile uint16_t op = 1;
 volatile uint16_t val;
 
-volatile uint32_t counter = 0;
+volatile uint8_t cRed = 0;
+volatile uint8_t cGreen = 0;
+volatile uint8_t cBlue = 0;
 
 void init() {
 
@@ -54,11 +57,11 @@ const uint16_t pwmtable_10[64] = {
 
 ISR(TIMER0_OVF_vect) {
 
-	if(counter < pwmtable_10[fade]) {
-		counter=counter+1;
-		PORTB = 0;
+	if(cRed < pwmtable_10[fade]) {
+		cRed = cRed + 1;
+		PORTB &= ~RED;
 	} else {
-		counter=0;
+		cRed = 0;
 		PORTB |= RED;
 	}
 }
