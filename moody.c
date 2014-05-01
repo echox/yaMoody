@@ -70,7 +70,7 @@ ISR(TIMER0_OVF_vect) {
 
 	if (colors & GREEN) {
 		if(cGreen < pwmtable[fade]) {
-			cGreen = cRed + 1;
+			cGreen = cGreen + 1;
 			PORTB &= ~GREEN;
 		} else {
 			cGreen = 0;
@@ -80,7 +80,7 @@ ISR(TIMER0_OVF_vect) {
 
 	if (colors & BLUE) {
 		if(cBlue < pwmtable[fade]) {
-			cBlue = cRed + 1;
+			cBlue = cBlue + 1;
 			PORTB &= ~BLUE;
 		} else {
 			cBlue = 0;
