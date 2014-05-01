@@ -22,6 +22,15 @@ volatile uint8_t cRed = 0;
 volatile uint8_t cGreen = 0;
 volatile uint8_t cBlue = 0;
 
+volatile uint8_t buttons = 0;
+volatile uint8_t cButton1 = 0;
+volatile uint8_t cButton2 = 0;
+volatile uint8_t cButton3 = 0;
+volatile uint8_t cButton4 = 0;
+
+volatile uint8_t triggered = 0;
+
+
 void init() {
 
 	// enable LED
@@ -114,7 +123,31 @@ int main() {
 
 	init();
 
+	colors |= BLUE;
+	colors |= RED;
+
 	while(1) { 
-colors |= RED;
+
+					if (!(PINC & BUTTON2)) {
+						if ((!(buttons & BUTTON2)) && (cButton2 >= 255)) {
+							buttons |= BUTTON2;
+							triggered = 1;
+						} else {
+							cButton2 = cButton2 + 1;
+						}
+					} else if ((buttons & BUTTON2) && PINC & BUTTON2) {
+								
+							if(cButton2 > 0) {
+								cButton2 = cButton2 - 1;
+							} else {
+								buttons = 0;
+							}
+					}
+	
+		if (triggered == 1) {
+						triggered = 0;
+			colors ^= RED;
+		}
 	}
+
 }
