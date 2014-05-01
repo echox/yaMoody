@@ -1,12 +1,12 @@
 PRG            = moody
 OBJ            = moody.o
 MCU_TARGET     = atmega168
-MCU						 = atmega168
+MCU		= atmega168
 
 OPTIMIZE       = -Os
 
-FLASHCMD			= avrdude -b4 -c usbasp -v -p m168 -P usb -U flash:w:$(PRG).hex
-ERASECMD      = uisp -dprog=bsd --erase
+FLASHCMD	= avrdude -b4 -c usbasp -v -p m168 -P usb -U flash:w:$(PRG).hex
+ERASECMD       = uisp -dprog=bsd --erase
 
 #SERIAL = /dev/ttyS0
 SERIAL = /dev/ttyUSB0
@@ -35,6 +35,7 @@ $(PRG).elf: $(OBJ)
 clean:
 	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
+	rm -rf *.bin *.hex *.srec
 
 flash:
 #	$(ERASECMD)
