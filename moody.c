@@ -17,6 +17,7 @@ volatile uint32_t multi;
 volatile uint16_t op = 1;
 volatile uint16_t val;
 
+volatile uint8_t colors = 0;
 volatile uint8_t cRed = 0;
 volatile uint8_t cGreen = 0;
 volatile uint8_t cBlue = 0;
@@ -57,13 +58,36 @@ const uint16_t pwmtable_10[64] = {
 
 ISR(TIMER0_OVF_vect) {
 
-	if(cRed < pwmtable_10[fade]) {
-		cRed = cRed + 1;
-		PORTB &= ~RED;
-	} else {
-		cRed = 0;
-		PORTB |= RED;
+	if (colors & RED) {
+		if(cRed < pwmtable_10[fade]) {
+			cRed = cRed + 1;
+			PORTB &= ~RED;
+		} else {
+			cRed = 0;
+			PORTB |= RED;
+		}
 	}
+
+	if (colors & GREEN) {
+		if(cGreen < pwmtable_10[fade]) {
+			cGreen = cRed + 1;
+			PORTB &= ~GREEN;
+		} else {
+			cGreen = 0;
+			PORTB |= GREEN;
+		}
+	}
+
+	if (colors & BLUE) {
+		if(cBlue < pwmtable_10[fade]) {
+			cBlue = cRed + 1;
+			PORTB &= ~BLUE;
+		} else {
+			cBlue = 0;
+			PORTB |= BLUE;
+		}
+	}
+
 }
 
 ISR(TIMER1_OVF_vect) {
@@ -91,6 +115,6 @@ int main() {
 	init();
 
 	while(1) { 
-
+colors |= RED;
 	}
 }
