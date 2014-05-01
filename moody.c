@@ -46,7 +46,7 @@ void init() {
 
 }
 
-const uint16_t pwmtable_10[64] = {
+const uint16_t pwmtable[64] = {
     0,  1,  1,  1,  1,  1,  2,  2,  2,  2,
     2,  3,  3,  3,  3,  4,  4,  5,  5,  5,
     6,  7,  7,  8,  9,  9, 10, 11, 12, 13,
@@ -59,7 +59,7 @@ const uint16_t pwmtable_10[64] = {
 ISR(TIMER0_OVF_vect) {
 
 	if (colors & RED) {
-		if(cRed < pwmtable_10[fade]) {
+		if(cRed < pwmtable[fade]) {
 			cRed = cRed + 1;
 			PORTB &= ~RED;
 		} else {
@@ -69,7 +69,7 @@ ISR(TIMER0_OVF_vect) {
 	}
 
 	if (colors & GREEN) {
-		if(cGreen < pwmtable_10[fade]) {
+		if(cGreen < pwmtable[fade]) {
 			cGreen = cRed + 1;
 			PORTB &= ~GREEN;
 		} else {
@@ -79,7 +79,7 @@ ISR(TIMER0_OVF_vect) {
 	}
 
 	if (colors & BLUE) {
-		if(cBlue < pwmtable_10[fade]) {
+		if(cBlue < pwmtable[fade]) {
 			cBlue = cRed + 1;
 			PORTB &= ~BLUE;
 		} else {
