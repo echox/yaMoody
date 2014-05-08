@@ -28,9 +28,6 @@ volatile uint8_t cButton2 = 0;
 volatile uint8_t cButton3 = 0;
 volatile uint8_t cButton4 = 0;
 
-volatile uint8_t triggered = 0;
-
-
 void init() {
 
 	// enable LED
@@ -50,6 +47,11 @@ void init() {
 	TIMSK1 |= (1<<TOIE1);
 //	TCCR1B |= (1<<CS00); 
 	TCCR1B |= (1<<CS01); 
+
+	TIMSK2 |= (1<<TOIE2);
+	TCCR2B |= (1<<CS00); 
+	TCCR2B |= (1<<CS01); 
+
 
 	sei();
 
@@ -100,7 +102,6 @@ ISR(TIMER0_OVF_vect) {
 }
 
 ISR(TIMER1_OVF_vect) {
-
 	multi= multi +1;
 	
 	if(multi>=1) {
@@ -119,34 +120,43 @@ ISR(TIMER1_OVF_vect) {
 	}
 }
 
+ISR(TIMER2_OVF_vect) {
+
+	if (!(PINC & BUTTON1)) {
+		cButton1 = cButton1 + 1;
+	} else if ((PINC & BUTTON1) && cButton1 > 10) {
+		buttons |= BUTTON1;
+		cButton1 = 0;
+	} else if (!(PINC & BUTTON3)) {
+		cButton2 = cButton2 + 1;
+	} else if ((PINC & BUTTON4) && cButton2 > 10) {
+		buttons |= BUTTON2;
+		cButton2 = 0;
+	} else if (!(PINC & BUTTON4)) {
+		cButton3 = cButton3 + 1;
+	} else if ((PINC & BUTTON4) && cButton3 > 10) {
+		buttons |= BUTTON3;
+		cButton3 = 0;
+	} else if (!(PINC & BUTTON4)) {
+		cButton4 = cButton4 + 1;
+	} else if ((PINC & BUTTON4) && cButton4 > 10) {
+		buttons |= BUTTON4;
+		cButton4 = 0;
+	}
+
+}
+
 int main() { 
 
 	init();
 
 	colors |= BLUE;
-	colors |= RED;
 
 	while(1) { 
-
-					if (!(PINC & BUTTON2)) {
-						if ((!(buttons & BUTTON2)) && (cButton2 >= 255)) {
-							buttons |= BUTTON2;
-							triggered = 1;
-						} else {
-							cButton2 = cButton2 + 1;
-						}
-					} else if ((buttons & BUTTON2) && PINC & BUTTON2) {
-								
-							if(cButton2 > 0) {
-								cButton2 = cButton2 - 1;
-							} else {
-								buttons = 0;
-							}
-					}
 	
-		if (triggered == 1) {
-						triggered = 0;
+		if (buttons & BUTTON1) {
 			colors ^= RED;
+			buttons = 0;
 		}
 	}
 
