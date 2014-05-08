@@ -127,14 +127,14 @@ ISR(TIMER2_OVF_vect) {
 	} else if ((PINC & BUTTON1) && cButton1 > 10) {
 		buttons |= BUTTON1;
 		cButton1 = 0;
-	} else if (!(PINC & BUTTON3)) {
+	} else if (!(PINC & BUTTON2)) {
 		cButton2 = cButton2 + 1;
-	} else if ((PINC & BUTTON4) && cButton2 > 10) {
+	} else if ((PINC & BUTTON2) && cButton2 > 10) {
 		buttons |= BUTTON2;
 		cButton2 = 0;
-	} else if (!(PINC & BUTTON4)) {
+	} else if (!(PINC & BUTTON3)) {
 		cButton3 = cButton3 + 1;
-	} else if ((PINC & BUTTON4) && cButton3 > 10) {
+	} else if ((PINC & BUTTON3) && cButton3 > 10) {
 		buttons |= BUTTON3;
 		cButton3 = 0;
 	} else if (!(PINC & BUTTON4)) {
@@ -150,14 +150,29 @@ int main() {
 
 	init();
 
-	colors |= BLUE;
+	colors |= GREEN;
 
 	while(1) { 
 	
 		if (buttons & BUTTON1) {
-			colors ^= RED;
-			buttons = 0;
+			buttons ^= BUTTON1;
 		}
+
+		if (buttons & BUTTON2) {
+			colors ^= RED;
+			buttons ^= BUTTON2;
+		}
+
+		if (buttons & BUTTON3) {
+			colors ^= BLUE;
+			buttons ^= BUTTON3;
+		}
+
+		if (buttons & BUTTON4) {
+			colors ^= GREEN;
+			buttons ^= BUTTON4;
+		}
+
 	}
 
 }
